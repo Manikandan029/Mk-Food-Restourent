@@ -1,0 +1,33 @@
+/* styles.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.common-link {
+  @apply hover:bg-button h-10 px-5 pt-2 rounded-2xl focus:bg-button mt-3;
+}
+
+.hover {
+  @apply transform transition-transform duration-300 hover:scale-105;
+}
+.menu-item {
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-item:hover {
+  transform: rotate(0);
+}
+
+@keyframes reduceWidth {
+  from {
+      width: 100%;
+  }
+  to {
+      width: 0%;
+  }
+}
+
+.animate-reduce-width {
+  animation: reduceWidth 5s linear forwards;
+}
