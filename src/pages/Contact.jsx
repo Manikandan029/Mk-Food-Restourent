@@ -17,85 +17,110 @@ export default function Contact() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const formDataToSubmit = new FormData(e.target);
+        formDataToSubmit.append("access_key", "6c04c4fc-dc7f-4a52-bec2-fd0630f4624a");
 
-        // Simulate a successful submission
-        setShowSuccess(true);
-        setTimeout(() => {
-            setShowSuccess(false);
-        }, 5000); // Hide the popup after 5 seconds
+        const object = Object.fromEntries(formDataToSubmit);
+        const json = JSON.stringify(object);
 
-        // Clear form after submission (optional)
-        setFormData({
-            name: '',
-            email: '',
-            subject: '',
-            message: ''
-        });
+        console.log("Form data to submit:", object); // Log the form data
+
+        const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            body: json
+        }).then((res) => res.json());
+
+        if (res.success) {
+            setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+            }, 5000); // Hide the popup after 5 seconds
+
+            // Clear form after submission (optional)
+            setFormData({
+                name: '',
+                email: '',
+                subject: '',
+                message: ''
+            });
+        } else {
+            console.error("Submission failed", res);
+        }
     };
 
     return (
-        <div className="min-h-screen bg-gray-200 flex items-center justify-center mt-0"> {/* Reduced margin top */}
+        <div className="min-h-screen bg-gray-200 flex items-center justify-center mt-0">
             <div className="max-w-4xl w-full mx-auto p-8 bg-white rounded-lg shadow-md">
                 <h1 className="text-3xl font-bold mb-4 text-center">Contact Us</h1>
-                <p className="text-lg text-gray-700 mb-6 text-center">We consider all the drivers of change and give you the components you need to create a truly remarkable experience.</p>
+                <p className="text-lg text-gray-700 mb-6 text-center">
+                    We consider all the drivers of change and give you the components you need to create a truly remarkable experience.
+                </p>
                 <form onSubmit={handleSubmit}>
-                    <div className="space-y-10"> {/* Adjusted space-y to space-y-10 */}
+                    <div className="space-y-10">
                         <div className="flex flex-col md:flex-row justify-between md:space-x-4">
                             <div className="flex flex-col w-full">
                                 <label htmlFor="name" className="text-gray-600 mb-1 font-bold">Name:</label>
-                                <input 
-                                    type="text" 
-                                    id="name" 
-                                    placeholder="Enter your Name" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.name} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="text"
+                                    id="name"
+                                    placeholder="Enter your Name"
+                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    name="name"
+                                    required
                                 />
                             </div>
                             <div className="flex flex-col w-full">
                                 <label htmlFor="email" className="text-gray-600 mb-1 font-bold">Email:</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    placeholder="Enter your Email" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.email} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="email"
+                                    id="email"
+                                    placeholder="Enter your Email"
+                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    name="email"
+                                    required
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row justify-between md:space-x-4">
                             <div className="flex flex-col w-full">
                                 <label htmlFor="subject" className="text-gray-600 mb-1 font-bold">Subject:</label>
-                                <input 
-                                    type="text" 
-                                    id="subject" 
-                                    placeholder="What's the subject?" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.subject} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="text"
+                                    id="subject"
+                                    placeholder="What's the subject?"
+                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.subject}
+                                    onChange={handleChange}
+                                    name="subject"
+                                    required
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="message" className="text-gray-600 mb-1 font-bold">Message:</label>
-                            <textarea 
-                                id="message" 
-                                placeholder="Write your message" 
-                                className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 resize-none w-full" 
-                                value={formData.message} 
-                                onChange={handleChange} 
-                                required 
+                            <textarea
+                                id="message"
+                                placeholder="Write your message"
+                                className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 resize-none w-full"
+                                value={formData.message}
+                                onChange={handleChange}
+                                name="message"
+                                required
                             />
                         </div>
                         <div className="flex justify-center mt-4">
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 className="w-full px-4 py-2 bg-red-600 text-white font-semibold rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                             >
                                 Send

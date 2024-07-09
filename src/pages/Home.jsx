@@ -228,5 +228,3 @@ import Blogs from '../data/blog';
     </>
   );
 };
-
-

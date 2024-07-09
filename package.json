@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "animate.css": "^4.1.1",
+    "framer-motion": "^11.2.13",
     "react-icons": "^5.2.1",
+    "react-intersection-observer": "^9.10.3",
     "react-router-dom": "^6.24.1"
   },
   "devDependencies": {

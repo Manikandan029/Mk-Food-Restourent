@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineClose } from 'react-icons/ai';
 
-export default function Book() {
+const Book = () => {
     const [showSuccess, setShowSuccess] = useState(false);
     const [formData, setFormData] = useState({
         date: '',
@@ -11,14 +11,49 @@ export default function Book() {
         person: ''
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (Object.values(formData).every(field => field)) {
-            setShowSuccess(true);
-            setTimeout(() => {
-                setShowSuccess(false);
-            }, 5000); // Hide the popup after 5 seconds
+            const formDataToSubmit = new FormData();
+            formDataToSubmit.append("access_key", "6c04c4fc-dc7f-4a52-bec2-fd0630f4624a");
+            formDataToSubmit.append("date", formData.date);
+            formDataToSubmit.append("time", formData.time);
+            formDataToSubmit.append("name", formData.name);
+            formDataToSubmit.append("phone", formData.phone);
+            formDataToSubmit.append("person", formData.person);
+
+            const object = Object.fromEntries(formDataToSubmit);
+            const json = JSON.stringify(object);
+
+            console.log("Form data to submit:", object); // Log the form data
+
+            const res = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: json
+            }).then((res) => res.json());
+
+            if (res.success) {
+                setShowSuccess(true);
+                setTimeout(() => {
+                    setShowSuccess(false);
+                }, 5000); // Hide the popup after 5 seconds
+
+                // Clear form after submission (optional)
+                setFormData({
+                    date: '',
+                    time: '',
+                    name: '',
+                    phone: '',
+                    person: ''
+                });
+            } else {
+                console.error("Submission failed", res);
+            }
         }
     };
 
@@ -30,81 +65,82 @@ export default function Book() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-200 flex items-center justify-center mt-0"> {/* Reduced margin top */}
-            <div className="max-w-4xl w-full mx-auto p-8 bg-white rounded-lg shadow-md ">
+        <div className="min-h-screen bg-gray-200 flex items-center justify-center">
+            <div className="max-w-4xl w-full mx-auto p-8 bg-white rounded-lg shadow-md">
                 <h1 className="text-3xl font-bold mb-4 text-center">Book A Table</h1>
                 <p className="text-lg text-gray-700 mb-6 text-center">We consider all the drivers of change and give you the components you need to create a truly remarkable experience.</p>
                 <form onSubmit={handleSubmit}>
-                    <div className="space-y-10 "> {/* Adjusted space-y to space-y-10 */}
+                    <div className="space-y-10">
                         <div className="flex flex-col md:flex-row justify-between md:space-x-4">
                             <div className="flex flex-col w-full">
                                 <label htmlFor="date" className="text-gray-600 mb-1 font-bold">Date:</label>
-                                <input 
-                                    type="date" 
-                                    id="date" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.date} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="date"
+                                    id="date"
+                                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.date}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="flex flex-col w-full">
                                 <label htmlFor="time" className="text-gray-600 mb-1 font-bold">Time:</label>
-                                <input 
-                                    type="time" 
-                                    id="time" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.time} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="time"
+                                    id="time"
+                                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.time}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row justify-between md:space-x-4">
                             <div className="flex flex-col w-full">
                                 <label htmlFor="name" className="text-gray-600 mb-1 font-bold">Name:</label>
-                                <input 
-                                    type="text" 
-                                    id="name" 
-                                    placeholder="Enter your Name" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.name} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="text"
+                                    id="name"
+                                    placeholder="Enter your Name"
+                                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="flex flex-col w-full">
                                 <label htmlFor="phone" className="text-gray-600 mb-1 font-bold">Phone:</label>
-                                <input 
-                                    type="number" 
-                                    id="phone" 
-                                    placeholder="x-xxx-xxx-xxxx" 
-                                    className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
-                                    value={formData.phone} 
-                                    onChange={handleChange} 
-                                    required 
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                    placeholder="xxx-xxx-xxxx"
+                                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="person" className="text-gray-600 mb-1 font-bold">Total person:</label>
-                            <select 
-                                id="person" 
-                                className="p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                value={formData.person} 
-                                onChange={handleChange} 
+                            <select
+                                id="person"
+                                className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={formData.person}
+                                onChange={handleChange}
                                 required
                             >
                                 <option value="">Select</option>
                                 <option value="1 Person">1 Person</option>
-                                <option value="2 Person">2 Person</option>
-                                <option value="3 Person">3 Person</option>
-                                <option value="4 Person">4 Person</option>
+                                <option value="2 Persons">2 Persons</option>
+                                <option value="3 Persons">3 Persons</option>
+                                <option value="4 Persons">4 Persons</option>
                             </select>
                         </div>
                         <div className="flex justify-center mt-4">
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 className="w-full px-4 py-2 bg-red-600 text-white font-semibold rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                             >
                                 Book a Table
@@ -129,4 +165,6 @@ export default function Book() {
             )}
         </div>
     );
-}
+};
+
+export default Book;
