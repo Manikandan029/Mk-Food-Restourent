@@ -10,9 +10,5 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "static": {
-    "src": "dist",
-    "dest": "/"
-  }
+  ]
 }
