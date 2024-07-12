@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path'; // Import path module for resolving paths
-import autoprefixer from 'autoprefixer'; // Import autoprefixer directly
+import path from 'path';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   plugins: [react()],
@@ -10,8 +10,7 @@ export default defineConfig({
     assetsDir: 'assets', // Specify the assets directory
     sourcemap: true, // Enable sourcemaps for debugging
     rollupOptions: {
-      // Provide external modules to exclude from the bundle
-      external: ['react', 'react-dom'],
+      // Remove external modules configuration for react and react-dom
     },
   },
   resolve: {
