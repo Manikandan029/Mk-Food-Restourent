@@ -6,7 +6,7 @@ import autoprefixer from 'autoprefixer';
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist', // Ensure this matches the directory Vercel expects
+    outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: true
   },
